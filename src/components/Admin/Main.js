@@ -22,6 +22,34 @@ const chartData={
         ]
     }
 }
+const lineChart=()=>{
+    return(
+        <Grid container spacing={3}>
+            <Grid item xs={12} sm={12} style={{maxWidth:"1000px",display:"block",margin:"auto",position:"relative"}}>
+                <Card>
+                    <CardContent>
+                        <Grid container spacing={6}>
+                            <Grid item xs={12} sm={8}>
+                                <div>
+                                    <Typography component="h5" variant="h5" >
+                                        Chart Sample
+                                    </Typography>
+                                    {console.log(chartData)}
+                                    <Line
+                                        options={{
+                                            responsive:true,
+                                        }}
+                                        data={chartData.data}
+                                    />
+                                </div>
+                            </Grid>
+                        </Grid>
+                    </CardContent>
+                </Card>
+            </Grid>
+        </Grid>
+    )
+}
 const Main=()=>{
     const useStyles = makeStyles((theme) => ({
         root: {
@@ -119,30 +147,8 @@ const Main=()=>{
                     </Card>
                 </Grid>
             </Grid>
-            <Grid container spacing={3}>
-                <Grid item xs={12} sm={12} style={{maxWidth:"1000px",display:"block",margin:"auto",position:"relative"}}>
-                    <Card>
-                        <CardContent>
-                            <Grid container spacing={6}>
-                                <Grid item xs={12} sm={8}>
-                                    <div>
-                                        <Typography component="h5" variant="h5" >
-                                            Chart Sample
-                                        </Typography>
-                                        {console.log(chartData)}
-                                        <Line
-                                            options={{
-                                                responsive:true,
-                                            }}
-                                            data={chartData.data}
-                                        />
-                                    </div>
-                                </Grid>
-                            </Grid>
-                        </CardContent>
-                    </Card>
-                </Grid>
-            </Grid>
+            {lineChart()}
+
         </Layout>
     )
 }
