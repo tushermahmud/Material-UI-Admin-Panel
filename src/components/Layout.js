@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React, { useState, useEffect } from 'react';
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -13,6 +13,8 @@ import Badge from "@material-ui/core/Badge";
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import MoreIcon from '@material-ui/icons/MoreVert';
+import LinearProgress from '@material-ui/core/LinearProgress';
+import { useLocation, Switch } from 'react-router-dom'; 
 
 const drawerWidth = 340;
 
@@ -28,7 +30,12 @@ const useStyles = makeStyles((theme) => ({
             display: 'block',
         },
     },
-
+    progressBar: {
+        width: '100%',
+        '& > * + *': {
+            marginTop: theme.spacing(2),
+        },
+    },
 
     inputInput: {
         padding: theme.spacing(1, 1, 1, 0),
@@ -92,6 +99,7 @@ const useStyles = makeStyles((theme) => ({
         // necessary for content to be below app bar
         ...theme.mixins.toolbar,
         justifyContent: 'space-between',
+        minHeight: "20px",
     },
     content: {
         flexGrow: 1,
@@ -110,11 +118,39 @@ const useStyles = makeStyles((theme) => ({
         marginLeft: 0,
     },
 }));
+const getWindowDimensions = () => {
+    const { innerWidth: width, innerHeight: height } = window;
+    return {
+        width,
+        height
+    };
+}
+const Layout = ({ children }) => {
+    const location = useLocation();
+    const [progress, setprogress] = useState(true);
+    const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions());
+    useEffect(() => {
+        function handleResize() {
+            setWindowDimensions(getWindowDimensions());
+            if (windowDimensions.width < 1000) {
+                setOpen(false);
+            } else {
+                setOpen(true);
+            }
+        }
+        setprogress(true)
+        console.log('Location changed');
 
-const Layout=({children})=> {
+        setTimeout(() => {
+            setprogress(false)
+        }, 2000);
+
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, [windowDimensions, location]); 
     const classes = useStyles();
     const theme = useTheme();
-    const [open, setOpen] = useState(false);
+    const [open, setOpen] = useState(true);
     const [anchorEl, setAnchorEl] = useState(null);
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
     const isMenuOpen = Boolean(anchorEl);
@@ -261,6 +297,9 @@ const Layout=({children})=> {
                         </IconButton>
                     </div>
                 </Toolbar>
+                {progress ? (<div className={classes.progressBar}>
+                    <LinearProgress color="primary" />
+                </div>) : null}
             </AppBar>
                 {renderMobileMenu}
                 {renderMenu}
@@ -270,7 +309,6 @@ const Layout=({children})=> {
                     [classes.contentShift]: open,
                 })}
             >
-                <div className={classes.drawerHeader} />
                 <div>
                     {children}
                 </div>
