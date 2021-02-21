@@ -225,7 +225,7 @@ const useStyles = makeStyles((theme) => ({
         marginBottom: theme.spacing(2),
     },
     table: {
-        minWidth: 750,
+        minWidth: 600,
     },
     visuallyHidden: {
         border: 0,
@@ -235,7 +235,6 @@ const useStyles = makeStyles((theme) => ({
         overflow: 'hidden',
         padding: 0,
         position: 'absolute',
-        top: 20,
         width: 1,
     },
 }));
@@ -303,7 +302,7 @@ const EnhancedTable=()=> {
 
     return (
         <Layout>
-            <div className={classes.root}>
+            <div className={classes.root} style={{ marginTop: "40px" }}>
                 <Paper className={classes.paper}>
                     <EnhancedTableToolbar numSelected={selected.length} />
                     <TableContainer>

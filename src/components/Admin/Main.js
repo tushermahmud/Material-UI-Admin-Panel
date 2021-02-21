@@ -1,10 +1,11 @@
-import React from "react";
+import React, {useEffect,useState} from "react";
 import Layout from "../Layout";
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
-import {Card,CardContent,Typography,CardMedia} from "@material-ui/core";
+import {Card,CardContent,Typography,CardMedia,Container} from "@material-ui/core";
 import PanToolIcon from '@material-ui/icons/PanTool';
 import {Line} from "react-chartjs-2";
+import { Fragment } from "react";
 const chartData={
     data:{
         labels:[1,2,3,4,5],
@@ -22,25 +23,71 @@ const chartData={
         ]
     }
 }
+const getWindowDimensions = () => {
+    let { innerWidth: width, innerHeight: height } = window;
+    if(width>1000){
+        width = width - 360
+    }
+    return {
+      width,
+      height
+    };
+}
 const Main=()=>{
+    const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions());
+    useEffect(() => {
+        function handleResize() {
+          setWindowDimensions(getWindowDimensions());
+        }
+        console.log(windowDimensions.width)
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+        
+      }, [windowDimensions]);    
     const useStyles = makeStyles((theme) => ({
         root: {
             flexGrow: 1,
+            width:windowDimensions.width>1000?windowDimensions.width-360:windowDimensions.width
         },
-        paper: {
-            padding: theme.spacing(2),
-            textAlign: 'center',
-            color: theme.palette.text.secondary,
+        card: {
+            // padding: theme.spacing(2),
+            // textAlign: 'center',
+            // color: theme.palette.text.secondary,
         },
+
     }));
     const classes = useStyles();
-
-    return(
-        <Layout>
-            <div className={classes.root}>
-                <Grid container spacing={3}>
-                    <Grid item xs={12} sm={3} >
-                        <Card className={classes.root}>
+    console.log(classes.root.width)
+    return (
+    <div style={{width:`${windowDimensions.width}px`,overflow:"hidden",float:"right",justifyContent:"flex-end",paddingRight:"20px",paddingLeft:"20px",marginTop:"40px"}}>
+        <div>
+        <Grid container spacing={3}>
+                <Grid item xs={12} sm={12}>
+                    <Card>
+                        <CardContent>
+                            <Grid container spacing={6}>
+                                <Grid item xs={12} sm={12}>
+                                    <div>
+                                        <Typography component="h5" variant="h5" >
+                                            Chart Sample
+                                        </Typography>
+                                        {console.log(chartData)}
+                                        <Line
+                                            options={{
+                                                responsive:true,
+                                            }}
+                                            data={chartData.data}
+                                        />
+                                    </div>
+                                </Grid>
+                            </Grid>
+                        </CardContent>
+                    </Card>
+                </Grid>
+            </Grid>
+            <Grid container spacing={3}>
+                    <Grid item xs={12} sm={4} >
+                        <Card className={classes.card}>
                             <CardContent>
                                 <Typography color="textSecondary" gutterBottom>
                                     Total Category
@@ -51,8 +98,8 @@ const Main=()=>{
                             </CardContent>
                         </Card>
                     </Grid>
-                    <Grid item xs={12} sm={3}>
-                        <Card className={classes.root}>
+                    <Grid item xs={12} sm={4}>
+                        <Card>
                             <CardContent>
                                 <Typography color="textSecondary" gutterBottom>
                                     Total Category
@@ -63,20 +110,8 @@ const Main=()=>{
                             </CardContent>
                         </Card>
                     </Grid>
-                    <Grid item xs={12} sm={3}>
-                        <Card className={classes.root}>
-                            <CardContent>
-                                <Typography color="textSecondary" gutterBottom>
-                                    Total Category
-                                </Typography>
-                                <Typography variant="h5" component="h2">
-                                    12340
-                                </Typography>
-                            </CardContent>
-                        </Card>
-                    </Grid>
-                    <Grid item xs={12} sm={3}>
-                        <Card className={classes.root}>
+                    <Grid item xs={12} sm={4}>
+                        <Card>
                             <CardContent>
                                 <Typography color="textSecondary" gutterBottom>
                                     Total Category
@@ -88,6 +123,7 @@ const Main=()=>{
                         </Card>
                     </Grid>
                 </Grid>
+                
             </div>
             <Grid container spacing={3}>
                 <Grid item xs={12} sm={12}>
@@ -119,32 +155,9 @@ const Main=()=>{
                     </Card>
                 </Grid>
             </Grid>
-            <Grid container spacing={3}>
-                <Grid item xs={12} sm={12} style={{maxWidth:"1000px",display:"block",margin:"auto",position:"relative"}}>
-                    <Card>
-                        <CardContent>
-                            <Grid container spacing={6}>
-                                <Grid item xs={12} sm={8}>
-                                    <div>
-                                        <Typography component="h5" variant="h5" >
-                                            Chart Sample
-                                        </Typography>
-                                        {console.log(chartData)}
-                                        <Line
-                                            options={{
-                                                responsive:true,
-                                            }}
-                                            data={chartData.data}
-                                        />
-                                    </div>
-                                </Grid>
-                            </Grid>
-                        </CardContent>
-                    </Card>
-                </Grid>
-            </Grid>
-        </Layout>
-    )
+    </div>
+    ); 
+    
 }
 
 
